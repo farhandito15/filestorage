@@ -38,11 +38,14 @@ class FileController extends Controller
      */
     public function store(StoreFileRequest $request)
     {
-        File::create([
-            'nama' => $request->nama,
-            'file' => $request->file('file')->storePublicly('img'),
-        ]);
-
+        try {
+            File::create([
+                'nama' => $request->nama,
+                'file' => $request->file('file')->storePublicly('img'),
+            ]);
+        } catch (\Throwable $th) {
+            return redirect()->with('error', 'Gagal menambahkan data: ' . $th->getMessage());
+        }
         return redirect()->route('file.index')->with('succes', 'Berhasil Menambahkan Data');
     }
 
@@ -80,11 +83,14 @@ class FileController extends Controller
     public function update(UpdateFileRequest $request, File $file)
     {
         \Illuminate\Support\Facades\Storage::delete($file->file);
-        $file->update([
-            'nama' => $request->nama,
-            'file' => $request->file('file')->storePublicly('img'),
-        ]);
-
+        try {
+            $file->update([
+                'nama' => $request->nama,
+                'file' => $request->file('file')->storePublicly('img'),
+            ]);
+        } catch (\Throwable $th) {
+            return redirect()->with('error', 'Gagal menambahkan data: ' . $th->getMessage());
+        }
         return redirect()->route('file.index')->with('succes', 'Berhasil Menambahkan Data');
     }
 

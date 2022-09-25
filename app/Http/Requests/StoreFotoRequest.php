@@ -25,8 +25,8 @@ class StoreFotoRequest extends FormRequest
     {
         return [
 
-            'nama' => 'required',
-            'gambar' => 'required',
+            'nama' => 'required|min:5|max:20',
+            'gambar' => 'required|max:200|',
         ];
     }
 }

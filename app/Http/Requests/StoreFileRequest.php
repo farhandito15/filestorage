@@ -25,8 +25,8 @@ class StoreFileRequest extends FormRequest
     {
         return [
 
-            'nama' => 'required',
-            'file' => 'required',
+            'nama' => 'required|min:5|max:20    ',
+            'file' => 'required|max:5000|mimes:pdf',
         ];
     }
 }

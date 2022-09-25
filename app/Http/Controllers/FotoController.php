@@ -39,10 +39,14 @@ class FotoController extends Controller
      */
     public function store(StoreFotoRequest $request)
     {
-        Foto::create([
-            'nama' => $request->nama,
-            'gambar' => $request->file('gambar')->storePublicly('img'),
-        ]);
+        try {
+            Foto::create([
+                'nama' => $request->nama,
+                'gambar' => $request->file('gambar')->storePublicly('img'),
+            ]);
+        } catch (\Throwable $th) {
+            return redirect()->with('error', 'Gagal menambahkan data: ' . $th->getMessage());
+        }
 
         return redirect()->route('foto.index')->with('succes', 'Berhasil Menambahkan Data');
     }
@@ -81,11 +85,15 @@ class FotoController extends Controller
     public function update(UpdateFotoRequest  $request, Foto $foto)
     {
         \Illuminate\Support\Facades\Storage::delete($foto->gambar);
-        $foto->update([
-            'nama' => $request->nama,
-            'gambar' => $request->file('gambar')->storePublicly('img'),
-        ]);
 
+        try {
+            $foto->update([
+                'nama' => $request->nama,
+                'gambar' => $request->file('gambar')->storePublicly('img'),
+            ]);
+        } catch (\Throwable $th) {
+            return redirect()->with('error', 'Gagal menambahkan data: ' . $th->getMessage());
+        }
         return redirect()->route('foto.index')->with('succes', 'Berhasil Menambahkan Data');
     }
 
